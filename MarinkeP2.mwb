@@ -1,0 +1,251 @@
+create database restaurante;
+use restaurante;
+
+create table mesa
+(
+ id_mesa int primary key auto_increment not null,
+ status enum("Livre","Ocupada","Sobremesa","Ocupada-Ociosa") not null,
+ mesa_cliente int,
+ foreign key (mesa_cliente) references cliente (id_cliente)
+);
+
+create table produto
+(
+id_produto int primary key auto_increment not null,
+nome_produto varchar(30) not null,
+valor_unitario decimal(5,2) not null,
+quant_estoque int not null,
+estoq_min int not null,
+marca varchar(30) not null
+);
+
+create table pedido
+(
+id_pedido int primary key auto_increment not null,
+pedido_cliente int,
+pedido_mesa int not null,
+foreign key (pedido_cliente) references cliente (id_cliente),
+foreign key (pedido_mesa) references mesa (id_mesa)
+);
+
+create table cliente
+(
+id_cliente int primary key auto_increment not null,
+nome_cliente varchar(120) not null
+);
+
+create table atendente
+(
+id_atendente int primary key auto_increment not null,
+nome varchar(120) not null
+);
+
+create table itemPedido
+( 
+id_itemPedido int not null primary key auto_increment,
+itemPedido_pedido int not null,
+itemPedido_produto int not null,
+quantidade int not null,
+valor_total decimal(6,2) not null,
+foreign key (itemPedido_pedido) references pedido(id_pedido),
+foreign key (itemPedido_produto) references produto(id_produto)
+);
+
+create table fechamento
+(
+id_fechamento int not null primary key auto_increment,
+fechamento_itemPedido int not null,
+fechamento_atendente int not null,
+valor_total decimal (6,2) not null,
+foreign key (fechamento_itemPedido) references itemPedido(id_itemPedido),
+foreign key (fechamento_atendente) references atendente (id_atendente)
+);
+
+
+alter table fechamento add tipo_pagam enum("Cartao Credito","Cartao Debito","PIX","Dinheiro") not null;
+alter table pedido modify pedido_cliente int null;
+
+
+-- n liga pros nomes sksksksksks, chat q criou aleatoriamente
+INSERT INTO cliente VALUES (1, 'David White');
+INSERT INTO cliente VALUES (2, 'Gregg Navarro');
+INSERT INTO cliente VALUES (3, 'Melissa Griffin');
+INSERT INTO cliente VALUES (4, 'David Simon PhD');
+INSERT INTO cliente VALUES (5, 'Jennifer Morris');
+INSERT INTO cliente VALUES (6, 'Jessica Ramirez');
+INSERT INTO cliente VALUES (7, 'Taylor Taylor');
+INSERT INTO cliente VALUES (8, 'Lisa Willis');
+INSERT INTO cliente VALUES (9, 'Katherine Hernandez');
+INSERT INTO cliente VALUES (10, 'Richard Copeland');
+
+INSERT INTO mesa VALUES (1, 'Ocupada', 4);
+INSERT INTO mesa VALUES (2, 'Sobremesa', 8);
+INSERT INTO mesa VALUES (3, 'Ocupada', 6);
+INSERT INTO mesa VALUES (4, 'Ocupada', 4);
+INSERT INTO mesa VALUES (5, 'Ocupada-Ociosa', 1);
+INSERT INTO mesa VALUES (6, 'Ocupada', 7);
+
+INSERT INTO atendente VALUES (1, 'Jennifer Flores');
+INSERT INTO atendente VALUES (2, 'David Romero');
+INSERT INTO atendente VALUES (3, 'Marcus Cameron');
+
+INSERT INTO produto VALUES (1, 'Price (Prato)', 13.03, 73, 5, 'Mcclure, Collins and Gibbs');
+INSERT INTO produto VALUES (2, 'Hair (Prato)', 6.84, 18, 5, 'Ochoa, Meza and Rodriguez');
+INSERT INTO produto VALUES (3, 'During (Prato)', 21.42, 68, 5, 'Roman, Perry and Butler');
+INSERT INTO produto VALUES (4, 'Movie (Prato)', 44.6, 27, 5, 'Cooley Ltd');
+INSERT INTO produto VALUES (5, 'Current (Prato)', 16.24, 81, 5, 'Barajas, Rodgers and Johnson');
+INSERT INTO produto VALUES (6, 'Conference (Prato)', 30.37, 66, 5, 'Copeland and Sons');
+INSERT INTO produto VALUES (7, 'Themselves (Prato)', 5.56, 83, 5, 'Doyle-Hansen');
+INSERT INTO produto VALUES (8, 'Hand (Prato)', 17.05, 35, 5, 'Robertson-Jimenez');
+INSERT INTO produto VALUES (9, 'Form (Prato)', 14.97, 95, 5, 'Anderson and Sons');
+INSERT INTO produto VALUES (10, 'Body (Prato)', 30.51, 21, 5, 'Johnston, Kelly and Valdez');
+INSERT INTO produto VALUES (11, 'During (Bebida)', 31.65, 83, 5, 'Lopez, Velasquez and Johnson');
+INSERT INTO produto VALUES (12, 'Tend (Bebida)', 48.91, 65, 5, 'Johnson and Sons');
+INSERT INTO produto VALUES (13, 'When (Bebida)', 16.93, 42, 5, 'Lambert, Flores and Steele');
+INSERT INTO produto VALUES (14, 'Parent (Bebida)', 37.53, 30, 5, 'Keller PLC');
+INSERT INTO produto VALUES (15, 'Share (Bebida)', 29.44, 10, 5, 'Moore-Stewart');
+
+INSERT INTO pedido VALUES (1, 10, 5);
+INSERT INTO pedido VALUES (2, 8, 4);
+INSERT INTO pedido VALUES (3, 3, 6);
+INSERT INTO pedido VALUES (4, 8, 6);
+INSERT INTO pedido VALUES (5, 3, 6);
+INSERT INTO pedido VALUES (6, 7, 4);
+INSERT INTO pedido VALUES (7, 10, 5);
+INSERT INTO pedido VALUES (8, 3, 5);
+INSERT INTO pedido VALUES (9, 7, 2);
+INSERT INTO pedido VALUES (10, 6, 4);
+INSERT INTO pedido VALUES (11, 6, 6);
+INSERT INTO pedido VALUES (12, 1, 4);
+INSERT INTO pedido VALUES (13, 8, 1);
+INSERT INTO pedido VALUES (14, 2, 1);
+INSERT INTO pedido VALUES (15, 6, 5);
+INSERT INTO pedido VALUES (16, 9, 4);
+INSERT INTO pedido VALUES (17, 8, 4);
+INSERT INTO pedido VALUES (18, 10, 3);
+INSERT INTO pedido VALUES (19, 4, 2);
+INSERT INTO pedido VALUES (20, 9, 4);
+INSERT INTO pedido VALUES (21, 6, 5);
+INSERT INTO pedido VALUES (22, 9, 2);
+INSERT INTO pedido VALUES (23, 4, 2);
+INSERT INTO pedido VALUES (24, 4, 5);
+INSERT INTO pedido VALUES (25, 3, 3);
+INSERT INTO pedido VALUES (26, 7, 3);
+INSERT INTO pedido VALUES (27, 9, 2);
+INSERT INTO pedido VALUES (28, 8, 6);
+INSERT INTO pedido VALUES (29, 3, 3);
+INSERT INTO pedido VALUES (30, 3, 2);
+
+INSERT INTO itemPedido VALUES (1.0, 20.0, 5.0, 5.0, 47.41);
+INSERT INTO itemPedido VALUES (2.0, 10.0, 13.0, 4.0, 104.01);
+INSERT INTO itemPedido VALUES (3.0, 18.0, 5.0, 5.0, 31.94);
+INSERT INTO itemPedido VALUES (4.0, 4.0, 1.0, 5.0, 25.29);
+INSERT INTO itemPedido VALUES (5.0, 3.0, 6.0, 3.0, 35.02);
+INSERT INTO itemPedido VALUES (6.0, 9.0, 13.0, 1.0, 172.98);
+INSERT INTO itemPedido VALUES (7.0, 8.0, 8.0, 2.0, 61.63);
+INSERT INTO itemPedido VALUES (8.0, 19.0, 14.0, 1.0, 135.6);
+INSERT INTO itemPedido VALUES (9.0, 14.0, 2.0, 1.0, 47.09);
+INSERT INTO itemPedido VALUES (10.0, 16.0, 11.0, 2.0, 135.33);
+INSERT INTO itemPedido VALUES (11.0, 4.0, 4.0, 1.0, 136.4);
+INSERT INTO itemPedido VALUES (12.0, 21.0, 11.0, 5.0, 112.18);
+INSERT INTO itemPedido VALUES (13.0, 11.0, 13.0, 1.0, 72.56);
+INSERT INTO itemPedido VALUES (14.0, 23.0, 9.0, 3.0, 45.92);
+INSERT INTO itemPedido VALUES (15.0, 20.0, 10.0, 3.0, 76.34);
+INSERT INTO itemPedido VALUES (16.0, 18.0, 5.0, 3.0, 68.05);
+INSERT INTO itemPedido VALUES (17.0, 7.0, 14.0, 4.0, 130.89);
+INSERT INTO itemPedido VALUES (18.0, 24.0, 5.0, 3.0, 61.93);
+INSERT INTO itemPedido VALUES (19.0, 24.0, 7.0, 1.0, 100.52);
+INSERT INTO itemPedido VALUES (20.0, 10.0, 5.0, 4.0, 121.75);
+
+INSERT INTO fechamento VALUES (1, 2, 2, 260.12, 'PIX');
+INSERT INTO fechamento VALUES (2, 15, 2, 314.62, 'PIX');
+INSERT INTO fechamento VALUES (3, 16, 1, 451.34, 'Cartao Debito');
+INSERT INTO fechamento VALUES (4, 2, 2, 420.02, 'Cartao Debito');
+INSERT INTO fechamento VALUES (5, 9, 2, 341.36, 'Dinheiro');
+INSERT INTO fechamento VALUES (6, 4, 2, 478.53, 'Dinheiro');
+INSERT INTO fechamento VALUES (7, 11, 3, 117.86, 'PIX');
+INSERT INTO fechamento VALUES (8, 12, 3, 436.53, 'Cartao Credito');
+INSERT INTO fechamento VALUES (9, 18, 1, 124.52, 'Dinheiro');
+INSERT INTO fechamento VALUES (10, 20, 2, 158.81, 'Cartao Debito');
+
+
+-- as atividades da 2 estao ai 
+
+use restaurante;
+
+-- 2)a
+select a.nome as Nome_funcionario, m.id_mesa as Numero_mesa, SUM(f.valor_total) as Total_gasto_mesa
+from atendente a
+inner join fechamento f on f.fechamento_atendente = a.id_atendente
+inner join itempedido i on i.id_itempedido = f.fechamento_itempedido
+inner join pedido p on p.id_pedido = i.itempedido_pedido
+inner join mesa m on m.id_mesa = p.pedido_mesa
+group by a.nome, m.id_mesa;
+
+-- 2) b
+select m.id_mesa as Mesa, p.nome_produto as Produto, i.quantidade
+from mesa m
+inner join pedido pe on pe.pedido_mesa = m.id_mesa
+inner join itempedido i on i.itempedido_produto = pe.id_pedido
+inner join produto p on p.id_produto = i.itempedido_produto
+where m.id_mesa = 6;
+
+DELIMITER //
+
+-- 2) c
+CREATE PROCEDURE StatusMesaLivre(IN p_id_mesa INT)
+BEGIN
+    UPDATE mesa
+    SET status = 'Livre'
+    WHERE id_mesa = p_id_mesa;
+END;//
+
+DELIMITER ;
+
+-- funciona, só que a trigger já atualizou quase tudo e chamei aonde era o unico que nao estava livre 
+CALL StatusMesaLivre(2);
+select * from mesa;
+
+-- atualiza a mesa pra livre automaticamente, criei esse pq acho q é melhor uma trigger doq a procedure nesse caso, se o cliente fechar a conta, a mesa que ele estava fica livre
+-- mas criei a procedure acima tbm
+DELIMITER //
+
+CREATE TRIGGER update_mesa_status
+AFTER INSERT ON fechamento
+FOR EACH ROW
+BEGIN
+    DECLARE mesa_id INT;
+    
+    SELECT pedido_mesa INTO mesa_id
+    FROM pedido
+    INNER JOIN itemPedido ON pedido.id_pedido = itemPedido.itemPedido_pedido
+    WHERE itemPedido.id_itemPedido = NEW.fechamento_itemPedido;
+    UPDATE mesa
+    SET status = 'Livre'
+    WHERE id_mesa = mesa_id;
+END;//
+
+DELIMITER ;
+
+-- atualiza o estoque
+DELIMITER //
+CREATE TRIGGER update_produto_estoque
+AFTER INSERT ON itemPedido
+FOR EACH ROW
+BEGIN
+    
+    DECLARE estoque_atual INT;
+    
+    SELECT quant_estoque INTO estoque_atual FROM produto
+    WHERE id_produto = NEW.itemPedido_produto;
+    
+    IF estoque_atual >= NEW.quantidade THEN
+        UPDATE produto
+        SET quant_estoque = quant_estoque - NEW.quantidade
+        WHERE id_produto = NEW.itemPedido_produto;
+	END IF;
+    
+END;//
+DELIMITER ;
+
+
